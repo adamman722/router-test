@@ -1,36 +1,33 @@
 import React from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
-import kitten1 from "../img/kitten1.jpg";
-import kitten2 from "../img/kitten2.jpg";
 import getKitten from "../CatDesp";
-import CatDescription from "./CatDescription";
+import PetDescription from "./PetDescription";
 
 function Cats() {
   const params = useParams();
   console.log(params.id);
+  const kittens = getKitten();
 
   const selectedKitten = () => {
-    const kittens = getKitten();
     const foundKitten = kittens.find((kitty) => kitty.name === params.id);
     return (
       <div>
         <img src={foundKitten.photo} alt="" className="dogs" />
-        <CatDescription kitten={foundKitten} />
+        <PetDescription pet={foundKitten} />
       </div>
     );
   };
+  const petLinks = kittens.map((kitten) => {
+    return (
+      <Link to={kitten.name}>
+        <img src={kitten.photo} alt="" className="dogs" />
+        <h2>{kitten.name}</h2>
+      </Link>
+    );
+  });
 
   return params.id === undefined ? (
-    <article className="cat-display">
-      <Link to="/cats/LeAnn">
-        <img src={kitten1} alt="" className="dogs" />
-        <h2>LeAnn</h2>
-      </Link>
-      <Link to="/cats/Kurtis">
-        <img src={kitten2} alt="" className="dogs" />
-        <h2>Kurtis</h2>
-      </Link>
-    </article>
+    <article className="cat-display">{petLinks}</article>
   ) : (
     <div>{selectedKitten()}</div>
   );
